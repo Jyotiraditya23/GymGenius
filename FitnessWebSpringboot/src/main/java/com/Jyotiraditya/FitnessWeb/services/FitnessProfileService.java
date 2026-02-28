@@ -8,6 +8,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 
@@ -20,11 +22,14 @@ public class FitnessProfileService {
 
         ProfileEntity profile = profileService.getCurrentProfile();
 
-        FitnessProfileEntity entity = fitnessProfileRepository
-                .findByProfileEntity(profile)
-                .orElseThrow(() -> new RuntimeException("Fitness profile not found"));
+        Optional<FitnessProfileEntity> entity =
+                fitnessProfileRepository.findByProfileEntity(profile);
 
-        return toDTO(entity);
+        if (entity.isEmpty()) {
+            return null;   // <-- IMPORTANT FIX
+        }
+
+        return toDTO(entity.get());
     }
 
     public FitnessProfileDTO addFitnessInformation(FitnessProfileDTO dto) {

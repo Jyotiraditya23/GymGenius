@@ -1,17 +1,19 @@
 package com.Jyotiraditya.FitnessWeb.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
-@Getter
-@Setter
+@Data
 public class DietPlanDTO {
+
     private Long id;
     private String planName;
-    private Integer totalCalorie;
+
+    private Integer totalCalories;
     private Integer protein;
     private Integer carbs;
-    private LocalDateTime createdDateTime;
+    private Integer fats;
+
+    private List<DietMealDTO> meals;
 }

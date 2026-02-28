@@ -16,6 +16,12 @@ public class FitnessProfileController {
 
     @GetMapping
     public ResponseEntity<FitnessProfileDTO> getProfile(){
+
+        FitnessProfileDTO dto = fitnessProfileService.getCompleteInformation();
+
+        if (dto == null) {
+            return ResponseEntity.notFound().build(); // 404
+        }
         return ResponseEntity.ok(fitnessProfileService.getCompleteInformation());
     }
 

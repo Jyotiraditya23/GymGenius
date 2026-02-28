@@ -11,12 +11,18 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# =========================
+# 🔑 GROQ LLM
+# =========================
 
 llm = ChatGroq(
     model="llama-3.3-70b-versatile",
     groq_api_key=os.getenv("GROQ_API_KEY")
 )
 
+# =========================
+# 📦 REQUEST + RESPONSE
+# =========================
 
 class WorkoutRequest(BaseModel):
     age: int
@@ -54,6 +60,11 @@ class WorkoutState(TypedDict):
     input: WorkoutRequest
     raw_output: str
     parsed_output: dict
+
+
+# =========================
+# 🔥 NODE 1: Generate
+# =========================
 
 def generate_workout_node(state: WorkoutState):
 
@@ -104,6 +115,10 @@ Generate exactly {req.workoutDaysPerWeek} days. Return raw JSON only.
     return {"raw_output": response.content}
 
 
+# =========================
+# 🔥 NODE 2: Parse JSON
+# =========================
+
 def clean_json(raw: str) -> str:
     """Strip markdown code fences if LLM wraps response in them."""
     # Remove ```json ... ``` or ``` ... ```
@@ -124,6 +139,10 @@ def parse_workout_node(state: WorkoutState):
 
     return {"parsed_output": parsed}
 
+
+# =========================
+# 🚀 BUILD GRAPH
+# =========================
 
 builder = StateGraph(WorkoutState)
 

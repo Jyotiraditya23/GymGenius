@@ -1,5 +1,7 @@
 package com.Jyotiraditya.FitnessWeb.services;
 
+import com.Jyotiraditya.FitnessWeb.dto.AiDietRequestDTO;
+import com.Jyotiraditya.FitnessWeb.dto.AiDietResponseDTO;
 import com.Jyotiraditya.FitnessWeb.dto.aiworkoutplan.AiWorkoutRequestDTO;
 import com.Jyotiraditya.FitnessWeb.dto.aiworkoutplan.AiWorkoutResponseDTO;
 import lombok.RequiredArgsConstructor;
@@ -29,5 +31,14 @@ public class AIService {
                 )
                 .bodyToMono(AiWorkoutResponseDTO.class)
                 .block(); // waits for response (sync call)
+    }
+    public AiDietResponseDTO generateDiet(AiDietRequestDTO request) {
+
+        return webClient.post()
+                .uri("/generate-diet")
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(AiDietResponseDTO.class)
+                .block();
     }
 }

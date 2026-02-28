@@ -16,13 +16,20 @@ llm = ChatGroq(
     groq_api_key=os.getenv("GROQ_API_KEY")
 )
 
+# =========================
+# 📦 REQUEST + RESPONSE
+# =========================
 
 class AiDietRequest(BaseModel):
     age: int
     height: float
     weight: float
     goal: str
-    workoutDaysPerWeek: int
+    targetCalories: int
+    targetProtein: int
+    targetCarbs: int
+    targetFats: int
+    note: str
 
 
 class Meal(BaseModel):
@@ -44,6 +51,9 @@ class AiDietResponse(BaseModel):
     meals: List[Meal]
 
 
+# =========================
+# 🧠 STATE
+# =========================
 
 class DietState(TypedDict):
     input: AiDietRequest
@@ -51,46 +61,66 @@ class DietState(TypedDict):
     parsed_output: dict
 
 
+# =========================
+# 🔥 NODE 1: Generate Diet
+# =========================
 
 def generate_diet_node(state: DietState):
 
     req = state["input"]
 
-    system_prompt = """You are a nutrition expert API. You ONLY respond with raw valid JSON.
-No markdown, no code blocks, no backticks, no explanation. Just pure JSON."""
+    system_prompt = """You are a nutrition expert API.
+You ONLY respond with raw valid JSON.
+No markdown, no code blocks, no explanation.
+The total macros must closely match the user's target values."""
+
+    # Ensure note always exists
+    user_note = req.note if req.note else "No user specification"
 
     prompt = f"""
-Create a detailed Indian diet plan for this user and return ONLY raw JSON with no markdown or code blocks.
+Create a detailed Indian diet plan strictly matching these macro targets.
 
 User Profile:
 - Age: {req.age}
 - Height: {req.height} cm
 - Weight: {req.weight} kg
 - Goal: {req.goal}
-- Workout Days per Week: {req.workoutDaysPerWeek}
 
-You MUST return JSON that exactly matches this structure:
+TARGET MACROS (IMPORTANT — must match closely):
+- Calories: {req.targetCalories}
+- Protein: {req.targetProtein} g
+- Carbs: {req.targetCarbs} g
+- Fats: {req.targetFats} g
+
+User Note:
+{user_note}
+
+You MUST:
+- Keep total calories within ±50 kcal
+- Keep macros within ±5g tolerance
+- Use Indian budget-friendly foods
+- Include: Breakfast, Mid-Morning Snack, Lunch, Evening Snack, Dinner
+
+Return ONLY raw JSON in this exact structure:
+
 {{
-  "planName": "string - descriptive plan name",
-  "totalCalories": integer - total daily calories,
-  "protein": integer - total daily protein in grams,
-  "carbs": integer - total daily carbs in grams,
-  "fats": integer - total daily fats in grams,
+  "planName": "string",
+  "totalCalories": integer,
+  "protein": integer,
+  "carbs": integer,
+  "fats": integer,
   "meals": [
     {{
-      "mealName": "string - e.g. Breakfast",
-      "mealType": "string - VEG or NON-VEG",
+      "mealName": "string",
+      "mealType": "VEG or NON-VEG",
       "calories": integer,
       "protein": integer,
       "carbs": integer,
       "fats": integer,
-      "recipe": "string - brief preparation description"
+      "recipe": "string"
     }}
   ]
 }}
-
-Include meals for: Breakfast, Mid-Morning Snack, Lunch, Evening Snack, and Dinner.
-All meals must be Indian food. Return raw JSON only.
 """
 
     response = llm.invoke([
@@ -100,9 +130,12 @@ All meals must be Indian food. Return raw JSON only.
 
     return {"raw_output": response.content}
 
+# =========================
+# 🔥 NODE 2: Parse
+# =========================
 
 def clean_json(raw: str) -> str:
-    """to remove not proper json provided by llm"""
+    """Strip markdown code fences if LLM wraps response in them."""
     raw = raw.strip()
     raw = re.sub(r"^```(?:json)?\s*", "", raw)
     raw = re.sub(r"\s*```$", "", raw)
@@ -120,8 +153,6 @@ def parse_diet_node(state: DietState):
 
     return {"parsed_output": parsed}
 
-
-
 builder = StateGraph(DietState)
 
 builder.add_node("generate", generate_diet_node)
@@ -132,3 +163,17 @@ builder.add_edge("generate", "parse")
 builder.set_finish_point("parse")
 
 diet_graph = builder.compile()
+
+"""# Graph
+
+┌───────────────┐
+│   generate    │
+│ generate_diet │
+└───────┬───────┘
+        │
+        ▼
+┌───────────────┐
+│     parse     │
+│ parse_diet    │
+└───────────────┘
+"""

@@ -25,7 +25,6 @@ public class WorkoutGenerationService {
     private final ProfileService profileService;
 
     public AiWorkoutResponseDTO generateWorkout(Long workoutId) {
-
         // 1️⃣ Get current logged-in profile
         ProfileEntity currentProfile = profileService.getCurrentProfile();
 
@@ -56,12 +55,9 @@ public class WorkoutGenerationService {
 
         return response;
     }
-
     private void saveGeneratedWorkout(ProfileEntity profile,
                                       AiWorkoutResponseDTO response) {
-
         try {
-
             String json = objectMapper.writeValueAsString(response);
 
             GeneratedWorkoutEntity entity =
@@ -78,7 +74,6 @@ public class WorkoutGenerationService {
             throw new RuntimeException("Failed to save generated workout");
         }
     }
-
     public AiWorkoutResponseDTO getGeneratedWorkout(Long id) {
 
         ProfileEntity currentProfile = profileService.getCurrentProfile();
