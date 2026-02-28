@@ -15,6 +15,25 @@
 
 ---
 
+## 🧠 About
+
+Most fitness apps hand you a generic plan and call it a day. **GymGenius is different.**
+
+When you sign up, you build a personal fitness profile — your age, weight, height, goal, diet preference, budget, and training days. Every AI-generated feature on the platform is grounded in that profile. Your workout split, your meal plan, your chatbot answers — nothing is one-size-fits-all.
+
+The idea is simple: **one platform, fully personalized, end-to-end.**
+
+- Log in → build your profile → get an AI workout plan tailored to your split
+- Set your macro targets → get a budget-friendly Indian meal plan with full recipes
+- Track your sets, reps, and weight → visualize your volume progress over time
+- Have any doubt? Ask the **AI gym buddy chatbot** — it answers like a knowledgeable training partner, not a search engine
+
+Under the hood, React talks to a Spring Boot backend which calls a Python FastAPI microservice running **LangGraph agents** on top of the **Groq LLM API** — making every AI response fast, context-aware, and structured.
+
+> *Built for Indian gym-goers who want smart fitness guidance without the fluff.*
+
+---
+
 ## 🚀 Features
 
 ### 1. 🔐 User Authentication & Fitness Profile
