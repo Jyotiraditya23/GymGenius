@@ -34,6 +34,44 @@ Under the hood, React talks to a Spring Boot backend which calls a Python FastAP
 
 ---
 
+## 🖼️ Application Screenshots
+
+### 🔐 Authentication
+<p align="center">
+  <img src="ScreenRecord&Shots/login.png" width="45%" />
+  <img src="ScreenRecord&Shots/register.png" width="45%" />
+</p>
+
+---
+
+### 👤 Fitness Profile Setup
+<p align="center">
+  <img src="ScreenRecord&Shots/fitnessprofile.png" width="70%" />
+</p>
+
+---
+
+### 🏋️ AI-Generated Workout Plan
+<p align="center">
+  <img src="ScreenRecord&Shots/workoutplan.png" width="80%" />
+</p>
+
+---
+
+### 🥗 AI-Generated Diet Plan
+<p align="center">
+  <img src="ScreenRecord&Shots/dietplan.png" width="80%" />
+</p>
+
+---
+
+### 📊 Workout Progress Tracking
+<p align="center">
+  <img src="ScreenRecord&Shots/workoutProgress1.png" width="80%" />
+</p>
+
+---
+
 ## 🚀 Features
 
 ### 1. 🔐 User Authentication & Fitness Profile
