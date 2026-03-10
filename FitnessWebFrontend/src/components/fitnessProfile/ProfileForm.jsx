@@ -1,6 +1,6 @@
 // src/components/fitnessProfile/ProfileForm.jsx
 
-const WORKOUT_OPTIONS = ["1-2 days/week", "3-4 days/week", "5-6 days/week", "Everyday"];
+const WORKOUT_OPTIONS = [1, 2, 3, 4, 5, 6, 7];
 const GOAL_OPTIONS = ["Weight Loss", "Muscle Gain", "Maintenance", "General Fitness", "Endurance"];
 const DIET_OPTIONS = ["High Protein", "Vegetarian", "Vegan", "Keto", "Paleo", "Omnivore", "Pescatarian"];
 
@@ -86,7 +86,11 @@ const ProfileForm = ({ isEditing, formData, onChange, onSubmit, onCancel, error 
                   className={inputClass + " appearance-none cursor-pointer"}
                 >
                   {options.map((o) => (
-                    <option key={o} value={o} className="bg-zinc-900">{o}</option>
+                    <option key={o} value={o} className="bg-zinc-900">
+                      {name === "workoutDays"
+                        ? `${o} day${o > 1 ? "s" : ""}/week`
+                        : o}
+                    </option>
                   ))}
                 </select>
               </Field>

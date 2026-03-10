@@ -1,8 +1,7 @@
 export const streamChat = (message, onMessage, onError) => {
   const eventSource = new EventSource(
-    `http://localhost:8000/chat_stream/${encodeURIComponent(message)}`
+    `${import.meta.env.VITE_CHAT_API}/chat_stream/${encodeURIComponent(message)}`
   );
-
   eventSource.onmessage = (event) => {
     try {
       const data = JSON.parse(event.data);

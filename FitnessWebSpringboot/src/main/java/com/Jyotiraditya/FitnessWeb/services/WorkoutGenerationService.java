@@ -40,7 +40,7 @@ public class WorkoutGenerationService {
                         .weight(fitness.getWeight())
                         .goal(fitness.getGoal())
                         .workoutDaysPerWeek(
-                                Integer.parseInt(fitness.getWorkoutDays())
+                                extractWorkoutDays(fitness.getWorkoutDays())
                         )
                         .difficulty(workout.getDifficulty())
                         .preferredMuscleSplit(workout.getWorkoutDays())
@@ -93,6 +93,23 @@ public class WorkoutGenerationService {
             );
         } catch (Exception e) {
             throw new RuntimeException("Failed to parse workout JSON");
+        }
+    }
+
+    //helper for entering eact values
+    private Integer extractWorkoutDays(String workoutDays) {
+
+        if (workoutDays == null || workoutDays.isEmpty()) {
+            return 3; // default value
+        }
+
+        try {
+            // extract first number (ex: "5-6 days/week" -> 5)
+            String number = workoutDays.replaceAll("[^0-9]", " ").trim().split(" ")[0];
+            return Integer.parseInt(number);
+
+        } catch (Exception e) {
+            return 3; // safe fallback
         }
     }
 }

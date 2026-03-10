@@ -20,7 +20,7 @@ const EMPTY_FORM = {
   goal: "Muscle Gain",
   dietPreference: "High Protein",
   monthlyBudget: "",
-  workoutDays: "3-4 days/week",
+  workoutDays: 3,
 };
 
 /* ─────────────────────────────────────────────────────────────────────────── */
@@ -63,6 +63,7 @@ const FitnessProfile = () => {
       height: formData.height ? parseFloat(formData.height) : null,
       weight: formData.weight ? parseFloat(formData.weight) : null,
       monthlyBudget: formData.monthlyBudget ? parseInt(formData.monthlyBudget, 10) : null,
+      workoutDays: parseInt(formData.workoutDays, 10),
     };
     try {
       if (isEditing) {

@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-microservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: python-microservice
+  template:
+    metadata:
+      labels:
+        app: python-microservice
+    spec:
+      containers:
+        - name: python-microservice
+          image: joebits/python-microservice:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000

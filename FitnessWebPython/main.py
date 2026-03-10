@@ -8,9 +8,13 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:30007",
+        "http://127.0.0.1:30007"
+    ],
     allow_credentials=True,
-    allow_methods=["GET"],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
@@ -30,8 +34,12 @@ def generate_diet(req: AiDietRequest):
 
 
 @app.get("/chat_stream/{message}")
-async def chat_stream(message: str, checkpoint_id: str | None = None):
+async def chat_stream(message: str):
     return StreamingResponse(
-        stream_chat(message, checkpoint_id),
-        media_type="text/event-stream"
+        stream_chat(message, checkpoint_id="default"),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive"
+        }
     )

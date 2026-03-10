@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: react-frontend
+  template:
+    metadata:
+      labels:
+        app: react-frontend
+    spec:
+      containers:
+        - name: react-frontend
+          image: joebits/react-frontend:latest
+          ports:
+            - containerPort: 80
+          env:
+            - name: VITE_API_URL
+              value: "http://localhost:30008"

@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  labels:
+    io.kompose.service: mysql
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.38.0 (HEAD)
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      io.kompose.service: mysql
+
+  template:
+    metadata:
+      labels:
+        io.kompose.service: mysql
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.38.0 (HEAD)
+
+    spec:
+      containers:
+        - name: fitness-mysql
+          image: mysql:8
+
+          ports:
+            - containerPort: 3306
+              protocol: TCP
+
+          env:
+            - name: MYSQL_DATABASE
+              value: fitness
+            - name: MYSQL_ROOT_PASSWORD
+              value: Jyoti@23
+
+          livenessProbe:
+            exec:
+              command:
+                - mysqladmin
+                - ping
+                - -h
+                - localhost
+            failureThreshold: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+
+          volumeMounts:
+            - name: mysql-storage
+              mountPath: /var/lib/mysql
+
+      volumes:
+        - name: mysql-storage
+          persistentVolumeClaim:
+            claimName: mysql-pvc
+
+      restartPolicy: Always
