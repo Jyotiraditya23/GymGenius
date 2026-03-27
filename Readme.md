@@ -394,15 +394,6 @@ The progress tracker uses Recharts to render:
 
 ---
 
-## 🧪 Testing
-
-API testing is done using **Postman**. Import the collection:
-```
-gymgenius/postman/GymGenius.postman_collection.json
-```
-
----
-
 ## 🔮 Future Enhancements
 
 - [ ] Supplement tracker & recommendations
@@ -425,13 +416,3 @@ git push origin feature/your-feature-name
 ```
 
 ---
-
-## 📄 License
-
-This project is licensed under the **MIT License**.
-
----
-
-<p align="center">
-  Made with ❤️ and 🏋️ by the GymGenius Team
-</p>
